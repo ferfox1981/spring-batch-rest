@@ -20,8 +20,11 @@ Data Source: https://covid19-brazil-api.now.sh/status
 
 I'm considering to use Firebase to store the information.
 
-# COnstruction
+# Construction
 
 I've decided to use Java 1.8 + Spring Batch as a development language.
+
+# Promotion
+An article on Medium will be written detailing the development
 
 
