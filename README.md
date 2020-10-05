@@ -15,6 +15,8 @@ The system will be deployed in a Docker-like free hosting service (maybe Heroku)
 
 We are going to use the following public API to collect day-to-day inforation about COVID deaths
 Data Source: https://covid19-brazil-api.now.sh/status
+We can compare our number with this site:
+https://ciis.fmrp.usp.br/covid19/pe-br/
 
 # Storage
 
