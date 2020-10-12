@@ -11,7 +11,7 @@ public class FirebaseConsumer {
 
     public List<CovidData> processFoo(){
         System.out.println("OOOOOOI");
-        List<CovidData> lista = new ArrayList<>(); 
+        List<CovidData> lista = new ArrayList<>();
         lista.add(new CovidData());
         lista.add(new CovidData());
         return lista;

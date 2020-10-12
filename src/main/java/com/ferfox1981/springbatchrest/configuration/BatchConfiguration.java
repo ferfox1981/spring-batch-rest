@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import com.ferfox1981.springbatchrest.configuration.tasklets.ReadDataTasket;
+import com.ferfox1981.springbatchrest.configuration.tasklets.ReadFirebaseTasklet;
 import com.ferfox1981.springbatchrest.entity.CovidData;
 import com.ferfox1981.springbatchrest.integration.covidcenter.ExternalConsumer;
 import com.ferfox1981.springbatchrest.integration.firebase.FirebaseConsumer;
@@ -19,7 +21,6 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.adapter.ItemReaderAdapter;
 import org.springframework.batch.item.adapter.ItemWriterAdapter;
 import org.springframework.batch.repeat.RepeatStatus;
@@ -41,49 +42,33 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
 	private ExternalConsumer ec;
 	
 	
+	@Bean 
+	public Tasklet getFirebaseTasklet() {
+		return new ReadFirebaseTasklet();
+	}
+	
+	@Bean
+	public Tasklet getReadTasklet() {
+		return new ReadDataTasket();
+	}
+	
 	@Bean
 	public Job job() {
 		return jobs.get("job").
 				preventRestart().
-				start(readDataTasklet1()).
+				start(readDataTasklet()).
 				next(processDataTasklet()).
 				next(saveDataTasklet()).
 				build();
 	}	
 
-/*
-	@Bean
-	protected Step step1() {
-		
-		return this.stepBuilderFactory.get("step1").
-				<List<CovidData>, List<CovidData>>chunk(1).
-				reader(dataReader()).
-				processor(processor()).				
-				writer(itemWriter()).
-				build();
-
-	}
-	*/
-
-	public Step readDataTasklet1() {
-		return stepBuilderFactory.get("step1").tasklet(new Tasklet(){
-			@Override
-			public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-				System.out.println("UM");
-				ec.getData("er");
-				return RepeatStatus.FINISHED;
-			}
-		}).build();
+	public Step readDataTasklet() {
+		return stepBuilderFactory.get("step1").tasklet(getReadTasklet()).build();
 	}	
 	
+
 	public Step processDataTasklet() {
-		return stepBuilderFactory.get("step2").tasklet(new Tasklet(){
-			@Override
-			public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-				System.out.println("DOIS");
-				return RepeatStatus.FINISHED;
-			}
-		}).build();
+		return stepBuilderFactory.get("step2").tasklet(getFirebaseTasklet()).build();
 	}	
 	
 	public Step saveDataTasklet() {

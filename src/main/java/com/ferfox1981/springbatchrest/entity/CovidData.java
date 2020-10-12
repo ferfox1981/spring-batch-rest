@@ -1,15 +1,31 @@
 package com.ferfox1981.springbatchrest.entity;
 
-import java.time.LocalDate;
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CovidData {
+public class CovidData implements Serializable {
 
-    public LocalDateTime getDate() {
+
+	public CovidData(LocalDateTime date, String state, Integer cases, Integer deaths) {
+		super();
+		this.date = date;
+		this.state = state;
+		this.cases = cases;
+		this.deaths = deaths;
+	}
+	public CovidData() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	public LocalDateTime getDate() {
 		return date;
 	}
 	public void setDate(LocalDateTime date) {
@@ -33,6 +49,7 @@ public class CovidData {
 	public void setDeaths(Integer deaths) {
 		this.deaths = deaths;
 	}
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="GMT")
 	public LocalDateTime date;
     public String state;
     public Integer cases;
