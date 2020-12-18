@@ -2,11 +2,13 @@ package com.ferfox1981.springbatchrest.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Comparator;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CovidData implements Serializable {
+public class CovidData implements Serializable{
 
 
 	public CovidData(LocalDateTime date, String state, Integer cases, Integer deaths) {
@@ -54,5 +56,28 @@ public class CovidData implements Serializable {
     public String state;
     public Integer cases;
     public Integer deaths;    
+    
+    @Override
+    public boolean equals(Object obj) {
+    	if(this == obj) 
+            return true;
+    	if(obj == null || obj.getClass()!= this.getClass()) 
+            return false;
+    	
+    	CovidData c = (CovidData) obj;
+    	
+    	return (this.cases.intValue() == c.cases.intValue() 
+    			&& this.deaths.intValue() == this.deaths.intValue()
+    			&& this.state.compareTo(c.state) == 0
+    			&& this.date.isEqual(c.date));		
+    	
+    }
+    
+    @Override
+    public int hashCode() 
+    { 
+    	return this.cases.intValue();
+    }
+
     
 }

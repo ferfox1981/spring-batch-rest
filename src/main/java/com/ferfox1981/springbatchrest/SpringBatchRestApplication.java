@@ -9,7 +9,12 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 public class SpringBatchRestApplication {
 
 	public static void main(String[] args) {
+
+
 		System.exit(SpringApplication.exit(SpringApplication.run(SpringBatchRestApplication.class, args)));
 	}
 
 }
+
+
+// https://dados.seplag.pe.gov.br/apps/corona.html

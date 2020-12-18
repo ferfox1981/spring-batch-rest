@@ -11,37 +11,84 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.ferfox1981.springbatchrest.adapter.LocalDateTimeAdapter;
 import com.ferfox1981.springbatchrest.entity.CovidData;
+import com.ferfox1981.springbatchrest.entity.Identity;
+import com.ferfox1981.springbatchrest.entity.Measurements;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 @Component
 public class ExternalConsumer {
 
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private Identity identity;
 
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
 	}
+	
+	@Bean
+	public Identity getIdentity() throws Exception{
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		JsonObject jO = new JsonObject();
+		jO.add("email", new JsonPrimitive("ferfox@gmail.com"));
+		jO.add("password", new JsonPrimitive("123456789"));
+		jO.add("returnSecureToken", new JsonPrimitive("true"));
+		
+		 HttpEntity<String> request = 
+			      new HttpEntity<String>(jO.toString(), headers);
+		
+		ResponseEntity<Identity> response = restTemplate.exchange(
+				"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAiGnFScVVqrYZE5-iBNL8BSqTpHy0P7I0",
+		        HttpMethod.POST,
+		        request,
+		        Identity.class
+		);
+		System.out.println(response);
+		
+		return response.getBody();
+		
+	}
+
 
 	public String getFireBaseData() throws Exception {
-		String test = restTemplate.getForObject("https://covid-moving-average.firebaseio.com/covid.json", String.class);
+		String test = restTemplate.getForObject("https://covid-moving-average.firebaseio.com/covid.json?auth="+identity.getIdToken(), String.class);
 		
 		return test;
 	}
 	
-	public void saveToFireBase(List<CovidData> list) {
+	public void saveToFireBase(Measurements measurements) {
+		
+				
+		
+		 
 		Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
-		String s = gson.toJson(list);
-		restTemplate.postForObject("https://covid-moving-average.firebaseio.com/covid.json", s, String.class);
+		String s = gson.toJson(measurements);
+		
+		restTemplate.put("https://covid-moving-average.firebaseio.com/covid.json?auth="+identity.getIdToken(), s, String.class);
+		
+
+		
 	}
+
 	
 	public List<CovidData> getDaysData() throws Exception {
 		
@@ -84,8 +131,8 @@ public class ExternalConsumer {
 		Calendar calendar = Calendar.getInstance();
 		List<String> lista = new ArrayList<String>();
 		for (int i = 1; i <= 7; i++) {
-			calendar.add(Calendar.DATE, -1);
-			lista.add(calendar.get(Calendar.YEAR) + Strings.padStart(calendar.get(Calendar.MONTH) + "", 2, '0')
+			calendar.add(Calendar.DAY_OF_MONTH, -1);
+			lista.add(calendar.get(Calendar.YEAR) + Strings.padStart(calendar.get(Calendar.MONTH)+1 + "", 2, '0')
 					+ Strings.padStart(calendar.get(Calendar.DAY_OF_MONTH) + "", 2, '0'));
 		}
 
