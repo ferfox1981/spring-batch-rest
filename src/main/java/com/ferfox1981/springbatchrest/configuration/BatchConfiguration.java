@@ -17,7 +17,6 @@ import com.ferfox1981.springbatchrest.configuration.tasklets.ProcessDataTasklet;
 import com.ferfox1981.springbatchrest.configuration.tasklets.ReadDataTasket;
 import com.ferfox1981.springbatchrest.configuration.tasklets.ReadFirebaseTasklet;
 import com.ferfox1981.springbatchrest.integration.covidcenter.ExternalConsumer;
-import com.ferfox1981.springbatchrest.integration.firebase.FirebaseProducer;
 import com.ferfox1981.springbatchrest.processor.CovidDataProcessor;
 
 @Configuration
@@ -81,10 +80,6 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
 	}	
 
 
-	@Bean 
-	public FirebaseProducer producerService(){
-		return new FirebaseProducer();
-	}	
 
     @Override
 	public void setDataSource(DataSource dataSource) {
