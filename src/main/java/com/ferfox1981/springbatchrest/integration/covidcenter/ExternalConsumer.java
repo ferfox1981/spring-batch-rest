@@ -27,6 +27,8 @@ import com.ferfox1981.springbatchrest.adapter.LocalDateTimeAdapter;
 import com.ferfox1981.springbatchrest.entity.CovidData;
 import com.ferfox1981.springbatchrest.entity.Identity;
 import com.ferfox1981.springbatchrest.entity.Measurements;
+import com.ferfox1981.springbatchrest.entity.MovingAverageData;
+import com.ferfox1981.springbatchrest.entity.MovingAverageDay;
 import com.ferfox1981.springbatchrest.util.Messages;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
@@ -74,7 +76,6 @@ public class ExternalConsumer {
 		        request,
 		        Identity.class
 		);
-		System.out.println(response);
 		
 		return response.getBody();
 		
@@ -96,6 +97,14 @@ public class ExternalConsumer {
 		
 
 		
+	}
+	
+	public void saveMovingAverageMeasurements(List<MovingAverageDay> results) {
+		Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
+		MovingAverageData mad = new MovingAverageData();
+		mad.setResults(results);
+		String s = gson.toJson(mad);
+		restTemplate.postForObject("https://covid-moving-average.firebaseio.com/covid.json?auth="+identity.getIdToken(), s, String.class);
 	}
 
 	

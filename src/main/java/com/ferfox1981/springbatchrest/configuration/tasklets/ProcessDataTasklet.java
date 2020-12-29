@@ -10,15 +10,20 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ferfox1981.springbatchrest.entity.CovidData;
 import com.ferfox1981.springbatchrest.entity.Measurements;
 import com.ferfox1981.springbatchrest.entity.MovingAverageDay;
+import com.ferfox1981.springbatchrest.integration.covidcenter.ExternalConsumer;
 
 public class ProcessDataTasklet implements Tasklet, StepExecutionListener{
 
 	
 	private Measurements  updated;
+	
+	@Autowired
+	private ExternalConsumer ec;
 	
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
@@ -37,6 +42,7 @@ public class ProcessDataTasklet implements Tasklet, StepExecutionListener{
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
 		// TODO Auto-generated method stub
 		List<MovingAverageDay> results = this.calculateMovingAverage();
+		ec.saveMovingAverageMeasurements(results);
 		return RepeatStatus.FINISHED;
 	}
 	

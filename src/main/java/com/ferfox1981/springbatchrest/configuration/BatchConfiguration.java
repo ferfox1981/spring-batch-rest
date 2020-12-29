@@ -42,6 +42,7 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
 		return new ReadFirebaseTasklet();
 	}
 	
+	@Bean
 	public Tasklet getProcesserTasklet() {
 		return new ProcessDataTasklet();
 	}

@@ -24,8 +24,7 @@ public class ReadDataTasket implements Tasklet, StepExecutionListener{
 	
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-		System.out.println("UM");
-		//ec.authenticate();
+
 		sourceData.setCovidMeasurements(ec.getDaysData());
 		return RepeatStatus.FINISHED;
 	}
