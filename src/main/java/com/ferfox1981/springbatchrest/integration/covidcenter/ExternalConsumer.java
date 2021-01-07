@@ -100,11 +100,14 @@ public class ExternalConsumer {
 	}
 	
 	public void saveMovingAverageMeasurements(List<MovingAverageDay> results) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+		LocalDateTime now = LocalDateTime.now();  
 		Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
 		MovingAverageData mad = new MovingAverageData();
 		mad.setResults(results);
 		String s = gson.toJson(mad);
 		restTemplate.postForObject("https://covid-moving-average.firebaseio.com/covid.json?auth="+identity.getIdToken(), s, String.class);
+		restTemplate.postForObject("https://covid-moving-average.firebaseio.com/covid.json?auth="+identity.getIdToken(), gson.toJson(dtf.format(now)), String.class);
 	}
 
 	

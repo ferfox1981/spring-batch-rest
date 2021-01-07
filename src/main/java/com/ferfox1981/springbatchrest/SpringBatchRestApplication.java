@@ -14,7 +14,7 @@ public class SpringBatchRestApplication {
 		System.exit(SpringApplication.exit(SpringApplication.run(SpringBatchRestApplication.class, args)));
 	}
 	
-	 
+	  
 	
 
 }

@@ -57,6 +57,7 @@ public class ReadFirebaseTasklet implements Tasklet, StepExecutionListener{
 			String  base = ec.getFireBaseData();
 			if ("null".compareTo(base) == 0) {
 				ec.saveToFireBase(this.current);
+				this.updated = this.current;
 			} else {
 								
 				Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
