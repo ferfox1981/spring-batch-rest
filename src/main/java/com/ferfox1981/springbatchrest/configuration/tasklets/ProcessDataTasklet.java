@@ -1,5 +1,7 @@
 package com.ferfox1981.springbatchrest.configuration.tasklets;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,8 +76,7 @@ public class ProcessDataTasklet implements Tasklet, StepExecutionListener{
 				int mv5 = results.get(i+4).getDeaths();
 				int mv6 = results.get(i+5).getDeaths();
 				int mv7 = results.get(i+6).getDeaths();
-				results.get(i).setMovAvgDay(new Float(mv1+mv2+mv3+mv4+mv5+mv6+mv7)/7);
-				
+				results.get(i).setMovAvgDay(new BigDecimal(mv1+mv2+mv3+mv4+mv5+mv6+mv7).divide(new BigDecimal(7), 3, RoundingMode.CEILING).toString());				
 				}catch (Exception e) {
 					break;
 				}

@@ -29,8 +29,6 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
 	@Autowired
 	private StepBuilderFactory stepBuilderFactory;
 	
-	@Autowired
-	private ExternalConsumer ec;
 	
 	@Bean
 	public Tasklet getReadTasklet() {

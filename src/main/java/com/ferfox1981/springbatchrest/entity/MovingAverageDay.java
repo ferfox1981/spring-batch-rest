@@ -1,5 +1,6 @@
 package com.ferfox1981.springbatchrest.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class MovingAverageDay {
@@ -19,12 +20,12 @@ public class MovingAverageDay {
 	
 	private Integer deaths;
 	private LocalDateTime date;
-	private Float movAvgDay;
+	private String movAvgDay;
 	
-	public Float getMovAvgDay() {
+	public String getMovAvgDay() {
 		return movAvgDay;
 	}
-	public void setMovAvgDay(Float movAvgDay) {
+	public void setMovAvgDay(String movAvgDay) {
 		this.movAvgDay = movAvgDay;
 	}
 
