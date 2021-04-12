@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ferfox1981.springbatchrest.entity.Measurements;
 import com.ferfox1981.springbatchrest.integration.covidcenter.ExternalConsumer;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 
 public class ReadDataTasket implements Tasklet, StepExecutionListener{
 
@@ -24,7 +27,14 @@ public class ReadDataTasket implements Tasklet, StepExecutionListener{
 	
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+		/*
+		FirebaseOptions options = FirebaseOptions.builder()
+			    .setCredentials(GoogleCredentials.getApplicationDefault())
+			    .setDatabaseUrl("https://teste-c5687-default-rtdb.firebaseio.com/")
+			    .build();
 
+			FirebaseApp.initializeApp(options);
+		*/
 		sourceData.setCovidMeasurements(ec.getDaysData());
 		return RepeatStatus.FINISHED;
 	}

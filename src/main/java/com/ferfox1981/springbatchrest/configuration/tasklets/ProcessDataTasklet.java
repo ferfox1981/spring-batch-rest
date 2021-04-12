@@ -18,6 +18,7 @@ import com.ferfox1981.springbatchrest.entity.CovidData;
 import com.ferfox1981.springbatchrest.entity.Measurements;
 import com.ferfox1981.springbatchrest.entity.MovingAverageDay;
 import com.ferfox1981.springbatchrest.integration.covidcenter.ExternalConsumer;
+import com.google.firebase.FirebaseApp;
 
 public class ProcessDataTasklet implements Tasklet, StepExecutionListener{
 
@@ -69,21 +70,22 @@ public class ProcessDataTasklet implements Tasklet, StepExecutionListener{
 		
 			for (int i = 0; i < results.size(); i++) {
 				try {
-				int mv1 = results.get(i).getDeaths();
-				int mv2 = results.get(i+1).getDeaths();
-				int mv3 = results.get(i+2).getDeaths();
-				int mv4 = results.get(i+3).getDeaths();
-				int mv5 = results.get(i+4).getDeaths();
-				int mv6 = results.get(i+5).getDeaths();
-				int mv7 = results.get(i+6).getDeaths();
-				results.get(i).setMovAvgDay(new BigDecimal(mv1+mv2+mv3+mv4+mv5+mv6+mv7).divide(new BigDecimal(7), 3, RoundingMode.CEILING).toString());				
-				}catch (Exception e) {
+					int mv1 = results.get(i).getDeaths();
+					int mv2 = results.get(i + 1).getDeaths();
+					int mv3 = results.get(i + 2).getDeaths();
+					int mv4 = results.get(i + 3).getDeaths();
+					int mv5 = results.get(i + 4).getDeaths();
+					int mv6 = results.get(i + 5).getDeaths();
+					int mv7 = results.get(i + 6).getDeaths();
+					results.get(i).setMovAvgDay(new BigDecimal(mv1 + mv2 + mv3 + mv4 + mv5 + mv6 + mv7)
+							.divide(new BigDecimal(7), 3, RoundingMode.CEILING).toString());
+				} catch (Exception e) {
 					break;
 				}
-				
+
 			}
 	
-
+			
 		
 		return results;
 		

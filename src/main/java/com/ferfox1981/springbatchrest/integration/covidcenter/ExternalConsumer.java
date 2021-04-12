@@ -93,10 +93,7 @@ public class ExternalConsumer {
 		Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
 		String s = gson.toJson(measurements);
 		
-		restTemplate.put("https://covid-moving-average.firebaseio.com/covid.json?auth="+identity.getIdToken(), s, String.class);
-		
-
-		
+		restTemplate.put("https://covid-moving-average.firebaseio.com/covid.json?auth="+identity.getIdToken(), s, String.class);				
 	}
 	
 	public void saveMovingAverageMeasurements(List<MovingAverageDay> results) {
@@ -116,7 +113,7 @@ public class ExternalConsumer {
 		List<CovidData> lista = new ArrayList<CovidData>();
 		List<String> dias = getLastDays();
 		for (String string : dias) {
-			String json = restTemplate.getForObject("https://covid19-brazil-api.now.sh/api/report/v1/brazil/" + string,
+			String json = restTemplate.getForObject("https://covid19-brazil-api.vercel.app/api/report/v1/brazil/" + string,
 					String.class);
 			JSONObject jsonObject = new JSONObject(json);
 
